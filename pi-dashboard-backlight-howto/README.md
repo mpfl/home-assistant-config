@@ -27,6 +27,13 @@ state of the screen. Home Assistant can turn the screen on and off, and set the
 brightness of the backlight. Home Assistant scenes and automations set the
 brightness through the course of the day.
 
+The Node-RED flow features:
+* error checking and accepts only valid inputs for power (0 or 1) and 
+backlight (0 to 255 inclusive)
+* availability/unavailability announcements to Home Assistant
+* state reporting back to Home Assistant
+* watching for touches (mouse clicks) and temporarily increasing brightness
+
 ## Requirements
 
 ### Hardware
