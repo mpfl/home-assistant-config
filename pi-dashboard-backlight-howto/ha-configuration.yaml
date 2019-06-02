@@ -1,0 +1,12 @@
+# Pi Dashboard backlights
+
+- platform: mqtt
+  name: "pi dashboard"
+  command_topic: "dashboard/pi/power/set"
+  state_topic: "dashboard/pi/power/status"
+  brightness_command_topic: "dashboard/pi/brightness/set"
+  brightness_state_topic: "dashboard/pi/brightness/status"
+  availability_topic: "dashboard/pi/availability"
+  payload_on: "0"
+  payload_off: "1"
+  qos: 2

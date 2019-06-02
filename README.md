@@ -1,2 +1,2 @@
 # home-assistant-config
-Random Home Assistant tweaks and howtos
+Random [Home Assistant](https://www.home-assistant.io/) tweaks, howtos and recipes.

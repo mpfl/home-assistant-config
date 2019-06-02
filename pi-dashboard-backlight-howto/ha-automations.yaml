@@ -1,0 +1,34 @@
+# Pi dashboard-related automations
+
+- id: set_daytime_lighting
+  alias: 'Set lighting for daytime'
+  trigger:
+    platform: numeric_state
+    entity_id: sun.sun
+    value_template: '{{ state.attributes.elevation }}'
+    above: 3.5
+  action:
+    service: scene.turn_on
+    entity_id: scene.day
+
+- id: set_dusk_lighting
+  alias: 'Set lighting for dusk'
+  trigger:
+    platform: numeric_state
+    entity_id: sun.sun
+    value_template: '{{ state.attributes.elevation }}'
+    below: 3.5
+  action:
+    service: scene.turn_on
+    entity_id: scene.dusk
+
+- id: set_night_lighting
+  alias: 'Set lighting for night'
+  trigger:
+    platform: numeric_state
+    entity_id: sun.sun
+    value_template: '{{ state.attributes.elevation }}'
+    below: -12
+  action:
+    service: scene.turn_on
+    entity_id: scene.night

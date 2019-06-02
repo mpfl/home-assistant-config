@@ -1,0 +1,346 @@
+[
+    {
+        "id": "2be232c1.8964ae",
+        "type": "tab",
+        "label": "Control Pi backlight",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "6d13620.e05a6a",
+        "type": "mqtt in",
+        "z": "2be232c1.8964ae",
+        "name": "Receive power state",
+        "topic": "dashboard/pi/power/set",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "a99638d1.17dfe8",
+        "x": 110,
+        "y": 100,
+        "wires": [
+            [
+                "859590e.9ed8f7"
+            ]
+        ]
+    },
+    {
+        "id": "80bb7f2f.44c33",
+        "type": "mqtt in",
+        "z": "2be232c1.8964ae",
+        "name": "Receive brightness state",
+        "topic": "dashboard/pi/brightness/set",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "a99638d1.17dfe8",
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "70b8c5b2.4d854c"
+            ]
+        ]
+    },
+    {
+        "id": "366f6de.555d592",
+        "type": "exec",
+        "z": "2be232c1.8964ae",
+        "command": "sudo bash -c ",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Execute",
+        "x": 900,
+        "y": 280,
+        "wires": [
+            [],
+            [],
+            [
+                "702029d2.bd3c08"
+            ]
+        ]
+    },
+    {
+        "id": "7f3818fa.7a1f38",
+        "type": "template",
+        "z": "2be232c1.8964ae",
+        "name": "Turn into power command",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "\"echo {{payload}} > /sys/class/backlight/rpi_backlight/bl_power\"",
+        "output": "str",
+        "x": 730,
+        "y": 220,
+        "wires": [
+            [
+                "366f6de.555d592"
+            ]
+        ]
+    },
+    {
+        "id": "52b0bcb.1b77944",
+        "type": "mqtt out",
+        "z": "2be232c1.8964ae",
+        "name": "Report power state",
+        "topic": "dashboard/pi/power/status",
+        "qos": "",
+        "retain": "",
+        "broker": "a99638d1.17dfe8",
+        "x": 1190,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "8aeda205.c29d2",
+        "type": "mqtt out",
+        "z": "2be232c1.8964ae",
+        "name": "Report brightness state",
+        "topic": "dashboard/pi/brightness/status",
+        "qos": "",
+        "retain": "",
+        "broker": "a99638d1.17dfe8",
+        "x": 1250,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "db8fbc07.c6133",
+        "type": "template",
+        "z": "2be232c1.8964ae",
+        "name": "Turn into brightness command",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "\"echo {{payload}} > /sys/class/backlight/rpi_backlight/brightness\"",
+        "output": "str",
+        "x": 770,
+        "y": 380,
+        "wires": [
+            [
+                "1869331c.4946ad"
+            ]
+        ]
+    },
+    {
+        "id": "e98f411f.01e38",
+        "type": "rpi-mouse",
+        "z": "2be232c1.8964ae",
+        "name": "",
+        "butt": "1",
+        "x": 90,
+        "y": 380,
+        "wires": [
+            [
+                "a45d4f4e.a602"
+            ]
+        ]
+    },
+    {
+        "id": "9118b9d0.e783e8",
+        "type": "function",
+        "z": "2be232c1.8964ae",
+        "name": "Set power context",
+        "func": "flow.set(\"lastpower\", flow.get(\"power\"))\nflow.set(\"power\", Number(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 530,
+        "y": 180,
+        "wires": [
+            [
+                "7f3818fa.7a1f38"
+            ]
+        ]
+    },
+    {
+        "id": "702029d2.bd3c08",
+        "type": "function",
+        "z": "2be232c1.8964ae",
+        "name": "Successful?",
+        "func": "if (msg.payload.code === 0) {\n    msg.payload = flow.get(\"power\");\n}\nelse {\n    msg.payload = flow.get(\"lastpower\");\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1030,
+        "y": 340,
+        "wires": [
+            [
+                "52b0bcb.1b77944"
+            ]
+        ]
+    },
+    {
+        "id": "d3af033d.c9311",
+        "type": "function",
+        "z": "2be232c1.8964ae",
+        "name": "Set brightness context",
+        "func": "flow.set(\"lastbrightness\", flow.get(\"brightness\"))\nflow.set(\"brightness\", Number(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 560,
+        "y": 340,
+        "wires": [
+            [
+                "db8fbc07.c6133"
+            ]
+        ]
+    },
+    {
+        "id": "1869331c.4946ad",
+        "type": "exec",
+        "z": "2be232c1.8964ae",
+        "command": "sudo bash -c ",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Execute",
+        "x": 940,
+        "y": 440,
+        "wires": [
+            [],
+            [],
+            [
+                "4f6ee4b8.7e604c"
+            ]
+        ]
+    },
+    {
+        "id": "4f6ee4b8.7e604c",
+        "type": "function",
+        "z": "2be232c1.8964ae",
+        "name": "Successful?",
+        "func": "if (msg.payload.code === 0) {\n    msg.payload = flow.get(\"brightness\");\n}\nelse {\n    msg.payload = flow.get(\"lastbrightness\");\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1070,
+        "y": 500,
+        "wires": [
+            [
+                "8aeda205.c29d2"
+            ]
+        ]
+    },
+    {
+        "id": "a45d4f4e.a602",
+        "type": "switch",
+        "z": "2be232c1.8964ae",
+        "name": "Filter clicks",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 230,
+        "y": 440,
+        "wires": [
+            [
+                "53de33af.0c5efc"
+            ],
+            []
+        ],
+        "info": "Pi Mouse Left will transmit 1 when the LMB is depressed and 0 when LMB is\nreleased. This node filters out the releases."
+    },
+    {
+        "id": "53de33af.0c5efc",
+        "type": "trigger",
+        "z": "2be232c1.8964ae",
+        "op1": "255",
+        "op2": "lastbrightness",
+        "op1type": "num",
+        "op2type": "flow",
+        "duration": "10",
+        "extend": true,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "name": "increase backlight for 10 seconds",
+        "x": 440,
+        "y": 500,
+        "wires": [
+            [
+                "70b8c5b2.4d854c"
+            ]
+        ]
+    },
+    {
+        "id": "859590e.9ed8f7",
+        "type": "function",
+        "z": "2be232c1.8964ae",
+        "name": "Only accept valid power input",
+        "func": "input = Number(msg.payload);\nif (input === 0 | input === 1) {\n    msg.payload = input;\n    return msg;\n}\nelse node.error(\"Input must be 0 or 1\")",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 320,
+        "y": 140,
+        "wires": [
+            [
+                "9118b9d0.e783e8"
+            ]
+        ]
+    },
+    {
+        "id": "70b8c5b2.4d854c",
+        "type": "function",
+        "z": "2be232c1.8964ae",
+        "name": "Only accept valid brightness input",
+        "func": "input = Number(msg.payload);\nif (input >= 0 && input <= 255) {\n    msg.payload = input;\n    return msg;\n}\nelse node.error(\"Input must be between 0 and 255 inclusive\")",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 340,
+        "y": 300,
+        "wires": [
+            [
+                "d3af033d.c9311"
+            ]
+        ]
+    },
+    {
+        "id": "3ed141a5.a3a67e",
+        "type": "comment",
+        "z": "2be232c1.8964ae",
+        "name": "This flow will turn the hosting Raspberry Pi into an MQTT controlled light comaptible with Home Assistant",
+        "info": "See [https://github.com/mpfl/home-assistant-config/pi-dashboard-backlight-howto]\nfor more information.",
+        "x": 370,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "a99638d1.17dfe8",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "sage",
+        "broker": "192.168.1.2",
+        "port": "1883",
+        "clientid": "pi",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "dashboard/pi/availability",
+        "birthQos": "0",
+        "birthRetain": "true",
+        "birthPayload": "online",
+        "closeTopic": "dashboard/pi/availability",
+        "closeQos": "0",
+        "closeRetain": "true",
+        "closePayload": "offline",
+        "willTopic": "dashboard/pi/availability",
+        "willQos": "0",
+        "willRetain": "true",
+        "willPayload": "offline"
+    }
+]

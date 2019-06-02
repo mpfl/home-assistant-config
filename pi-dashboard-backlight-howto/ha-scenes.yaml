@@ -1,0 +1,19 @@
+# Pi dashboard backlight scenes
+
+- name: Day
+  entities:
+    light.pi_dashboard:
+      state: true
+      brightness: 255
+
+- name: Dusk
+  entities:
+    light.pi_dashboard:
+      state: true
+      brightness: 150
+
+- name: Night
+  entities:
+    light.pi_dashboard:
+      state: true
+      brightness: 50
