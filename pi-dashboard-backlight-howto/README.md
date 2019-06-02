@@ -40,13 +40,13 @@ brightness through the course of the day.
 ### Systems
 1. [Home Assistant](https://www.home-assistant.io/)
 2. MQTT Broker e.g. [mosquitto](https://mosquitto.org/)
-  * Home Assistant has a guide on [MQTT brokers[(https://www.home-assistant.io/docs/mqtt/broker/)]
+    * Home Assistant has a guide on [MQTT brokers](https://www.home-assistant.io/docs/mqtt/broker/)
 
 ## Method
 
 1. [Install Node-RED on your Pi](https://nodered.org/docs/hardware/raspberrypi). Be sure to:
-  * Install the Pi-specific integrations
-  * Set Node-RED to autostart on boot
+    * Install the Pi-specific integrations
+    * Set Node-RED to autostart on boot
 2. Import [the flows](node-red-pi-dashboard-flows.json) in Node-RED
 3. Customise the flows with the details of your MQTT broker
 4. Add the MQTT light to Home assistant [configuration](ha-configuration.yaml)
